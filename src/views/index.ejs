@@ -29,13 +29,14 @@
             <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
             <select id="Year" onChange="MonthSelect()"></select>
             <select id="Month"></select> 
-            <button id="button" type="button" onClick="DateSel()">Ingresar</button>
+            <button id="button" type="button" onClick="DateSel()">Mostrar</button>
         </div>
         <br>
 
         <div>
             <label class="sidebarLabel">Rango del Gráfico</label>
-            <input type="range" min="2018" max="2021" value="2021" id="timeSlider" >
+            
+            <input type="range" min="2018" max="2021" value="2021" id="timeSlider" class="timeSlider" >
             <label id="labelSlider"></label>
         </div>
         

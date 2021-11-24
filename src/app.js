@@ -31,6 +31,8 @@ const HOST = config.HOST;
 // starting the server
 server.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`)
+
+
 /*
 server.listen(process.env.PORT || 3000, () => {
     console.log('Server on port ' + (process.env.PORT ||3000) );

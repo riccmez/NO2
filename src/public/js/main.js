@@ -363,6 +363,7 @@ function circleClick(e){
    }
 }
 socket.on('Hist', (res) => {
+    var dat = res.timeseries;
     changeROI(Distname,dat);
     select.disabled = false;
     select2.disabled = false;
@@ -416,7 +417,7 @@ var lineCharData = async (seriesData) => {
     }
     Highcharts.chart('container', {
         title: {
-            text: 'Nivel de Dióxido de Nitrogeno (NO2)'
+            text: 'Nivel de Dióxido de Nitrogeno (Marcador)'
         },
     
         subtitle: {
