@@ -80,34 +80,13 @@ module.exports = (io) => {
             });
         }
         function getNO2Hist(arg) {
-            return new bbPromise(function(resolve, reject) {
-                var process = spawn('node', ["src/Hist.js", JSON.stringify(arg)]);
-                resultString = '';
-        
-                process.stdout.on('data', function(data) {
-                    resultString += data.toString();
-                });
-        
-                process.stderr.on('data', function(err) {
-                    reject(err.toString());
-                });
-        
-                process.stderr.on('end', () => {
-                    let resultData ={};
-                    try {
-                        resultData = JSON.parse(resultString);
-                        resultData.success = true;
-                        
-                    } catch(error) {
-                        console.error(error);
-                        resultData.success = false;
-                    }
-                    socket.emit('Hist', resultData);
-                });
-                process.on('exit', function() {
-                    resolve();
-                });
-            });
+            var params = JSON.parse(process.argv[2]);
+
+            var file = params.Name
+            var jsonURL = './HistData/'+ file +'.json';      
+            let newData = require(jsonURL);
+            socket.emit('Hist', resultData);
+                
         }
     });
 }

@@ -14,7 +14,7 @@ const runAnalysis = async function() {
     let band_viz = { 
         min: 0,
         max: 0.0002 ,
-        palette: ['white', 'blue', 'purple', 'cyan','green', 'yellow', 'red'],
+        palette: ['blue', 'green', 'yellow', 'red'],
         opacity: 0.45
     }
 

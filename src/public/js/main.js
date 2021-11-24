@@ -488,13 +488,10 @@ var legend = L.control({ position: "topright" });
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
   div.innerHTML += "<h4>&micromol/m<sup>2</sup></h4>";
-  div.innerHTML += '<i style="background: #FE6868"></i><span>200 - 175</span><br>';
-  div.innerHTML += '<i style="background: #FEF768"></i><span>175 - 150</span><br>';
-  div.innerHTML += '<i style="background: #7BC768"></i><span>150 - 125</span><br>';
-  div.innerHTML += '<i style="background: #8AFFEC"></i><span>100 - 75</span><br>';
-  div.innerHTML += '<i style="background: #BA8CBA"></i><span>75 - 50</span><br>';
-  div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 25</span><br>';
-  div.innerHTML += '<i style="background: #FFFFFF"></i><span>25 - 0</span><br>';
+  div.innerHTML += '<i style="background: #FE6868"></i><span>200 - 150</span><br>';
+  div.innerHTML += '<i style="background: #FEF768"></i><span>150 - 100</span><br>';
+  div.innerHTML += '<i style="background: #7BC768"></i><span>100 - 50</span><br>';
+  div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 0</span><br>';
   
   
 
