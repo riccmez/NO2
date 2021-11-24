@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodejs Leaflet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dateSelect.css">
+    <link rel="stylesheet" href="/css/highchart.css">
+
+    <!-- SIDEBAR -->
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+
+<body>
+
+    <div class="btn">
+        <span class="fas fa-bars"></span>
+	<div class="loader" id="spinLoader"></div>
+    </div>
+    <nav class="sidebar">
+        <div class="text"> UTEC NO2 Project</div>
+        <br>
+        <div>
+            <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
+            <select id="Year" onChange="MonthSelect()"></select>
+            <select id="Month"></select> 
+            <button id="button" type="button" onClick="DateSel()">Ingresar</button>
+        </div>
+        <br>
+
+        <div>
+            <label class="sidebarLabel">Rango del Gráfico</label>
+            <input type="range" min="2018" max="2021" value="2021" id="timeSlider" >
+            <label id="labelSlider"></label>
+        </div>
+        
+
+        <div id="container" class="highcharts-figure"></div>
+        <br>
+        <div id="container2" class="highcharts-figure"></div>
+        <br>
+        
+
+        <!-- 
+        <ul>
+            <li class="active"><a href="#">Dashboard</a></li>
+            <li>
+                <a href="#" class="feat-btn">Features
+                <span class="fas fa-caret-down first"></span>
+                </a>
+                <ul class="feat-show">
+                    <li><a href="#">Pages</a></li>
+                    <li><a href="#">Elements</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="serv-btn">Services
+                <span class="fas fa-caret-down second"></span>
+                </a>
+                <ul class="serv-show">
+                    <li><a href="#">App Design</a></li>
+                    <li><a href="#">Web Design</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Overview</a></li>
+            <li><a href="#">Shortcuts</a></li>
+            <li><a href="#">Feedback</a></li>
+        </ul>
+        -->
+    </nav>
+
+    <div class="content">
+        <div id="map-template">
+        </div>
+        
+    </div>
+
+
+    <script>
+        $('.btn').click(function(){
+          $(this).toggleClass("click");
+          $('.sidebar').toggleClass("show");
+        });
+          $('.feat-btn').click(function(){
+            $('nav ul .feat-show').toggleClass("show");
+            $('nav ul .first').toggleClass("rotate");
+          });
+          $('.serv-btn').click(function(){
+            $('nav ul .serv-show').toggleClass("show1");
+            $('nav ul .second').toggleClass("rotate");
+          });
+          $('nav ul li').click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+          });
+     </script>
+ 
+    <!-- HIGHCHART -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+    <!-- LEAFLET -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- CUSTOM SCRIPTS -->
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

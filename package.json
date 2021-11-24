@@ -1,0 +1,24 @@
+{
+  "name": "no2project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Noe Salvatierra",
+  "license": "ISC",
+  "dependencies": {
+    "@google/earthengine": "^0.1.290",
+    "bluebird": "^3.7.2",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.1",
+    "highcharts": "^9.3.0",
+    "ml-savitzky-golay-generalized": "^2.0.3",
+    "socket.io": "^4.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
