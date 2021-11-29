@@ -27,7 +27,6 @@ ee.data.authenticateViaPrivateKey(privateKey, runAnalysis, function(e) {
     console.error('Authentication error: ' + e);
 });
 
-
 function rmmissing(data) {
     let timestamps = [];
     let values = [];
@@ -48,18 +47,15 @@ function rmmissing(data) {
             values.push(data[i][4]);
         }
     }
-
     try {
         filterValues = SG(values, 1, options);
     }
     catch {
         filterValues = values;
     }
-
     newData = timestamps.map(function(e, i) {
         return [e, filterValues[i]];
     });
-
   return newData;
 }
 

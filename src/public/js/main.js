@@ -191,9 +191,10 @@ map.on('click', function(e) {
 });
 
 socket.on('markerInfo', (res) => {
-    if (res.success){
+    lineCharData(res.timeseries);
+    /*if (res.success){
         lineCharData(res.timeseries);
-    }	
+    }*/
     select.disabled = false;
     select2.disabled = false;
     button.disabled = false;
@@ -391,19 +392,11 @@ socket.on('Link', (res) => {
 	slider.disabled = false;
 	isAvailable = true;
    
- if (res.success){
-        //map.eachLayer(function (layer) {
-          //map.removeLayer(layer);
-        //});
-	map.removeLayer(no2Map);
-        //L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        var link = res.Link;
-        no2Map = L.tileLayer(link.toString()).addTo(map);
-        //var baseMaps = {
-        //    "Map": map,
-        //}
-    }
+
+	map.removeLayer(no2Map);
+    var link = res.Link;
+    no2Map = L.tileLayer(link.toString()).addTo(map);
 	loader.style.display = "none";
 });
 
