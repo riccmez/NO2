@@ -2,6 +2,7 @@
     min-width: 360px; 
     max-width: 800px;
     margin: 1em auto;
+    height: auto;
 }
 
 .highcharts-data-table table {

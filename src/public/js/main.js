@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
     let seriesData = [];
     lineCharData(seriesData);
-});
 
+});
 
 function changeROI(name,data){
     Highcharts.chart('container2', {
@@ -15,7 +15,7 @@ function changeROI(name,data){
         },
 
         subtitle: {
-            text: 'ROI: ' + name
+            text: 'ROI: ' + name + ' (2018-2021)'
         },
 
         yAxis: {
@@ -90,35 +90,15 @@ async function getMeasurements(lat, lng) {
     socket.emit('userCoordinates', msg);
 }
 
-
-var slider = document.getElementById("timeSlider");
-var labelSlider = document.getElementById("labelSlider");
 var select = document.getElementById('Year');
 var select2 = document.getElementById('Month');
 var button = document.getElementById('button');
 var loader = document.getElementById('spinLoader');
 loader.style.display = "none";
 
-labelSlider.innerHTML = slider.value;
-
-slider.oninput = function() {
-    labelSlider.innerHTML = this.value;
-    if (slider.value == currDate.getFullYear()){
-        startDate = '2021-01-01';
-        endDate = todayDate;
-    } else if (slider.value == '2018') {
-        startDate = '2018-07-30';
-        endDate = '2018-12-31';
-    }  else {
-        startDate = this.value + '-01-01';
-        endDate = this.value + '-12-31';
-    }
-    getMeasurements(lat, lng)
-	loader.style.display = "block";
-}
 
 var map = L.map('map-template').setView([-12.046374, -77.042793], 13)
-var openstreet = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+var openstreet = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');//'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
 openstreet.addTo(map);
 var no2Map= L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
 
@@ -132,7 +112,9 @@ var overlayMaps = {
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 const socket = io();
-var isAvailable = true;
+var markerYear = "2021";
+var isMarkerAvailable = true;
+var isInterestLocationAvailable = true;
 var layerGroup = L.layerGroup().addTo(map);
 
 
@@ -141,19 +123,18 @@ var DateDict = {Start: '2021-10-01', End:'2021-10-15'}
 console.log("cargando primera capa")
 loader.style.display = "block";
 socket.emit('Mapviz', DateDict)
+
+/*
 select.disabled = true;
 select2.disabled = true;
 button.disabled = true;
 slider.disabled = true;
-isAvailable = false;
-
+*/
 
 map.locate({enableHighAccuracy: true});
 
-
 map.on('locationfound', e => {
-    if (isAvailable) {
-
+    if (isMarkerAvailable) {
         layerGroup.clearLayers();
         map.closePopup();
         const coords = [e.latlng.lat, e.latlng.lng]
@@ -161,22 +142,17 @@ map.on('locationfound', e => {
         lng = e.latlng.lng;
         const marker = L.marker(coords).addTo(map);
         marker.addTo(layerGroup);
-        marker.bindPopup('Tu ubicación actual');
-        map.addLayer(marker);
+        marker.bindPopup("Ubicación actual estimada <br> <b>Lon: </b>" + lng +" <br> <b>Lat: </b>" + lat).openPopup();
+        //map.addLayer(marker);
         getMeasurements(e.latlng.lat, e.latlng.lng);
-        select.disabled = true;
-        select2.disabled = true;
-        button.disabled = true;
-        slider.disabled = true;
-        isAvailable = false;
+        isMarkerAvailable = false;
 	    loader.style.display = "block";
     }
 });
 
 
-
 map.on('click', function(e) {
-    if (isAvailable) {
+    if (isMarkerAvailable) {
         layerGroup.clearLayers();
         map.closePopup();
         const coords = [e.latlng.lat, e.latlng.lng]
@@ -184,29 +160,18 @@ map.on('click', function(e) {
         lng = e.latlng.lng;
         const marker = L.marker(coords).addTo(map);
         marker.addTo(layerGroup);
+        marker.bindPopup("<b>Lon: </b>" + lng +" <br> <b>Lat: </b>" + lat).openPopup();
         getMeasurements(e.latlng.lat, e.latlng.lng);
-        select.disabled = true;
-        select2.disabled = true;
-        button.disabled = true;
-        slider.disabled = true;
-        isAvailable = false;
+        isMarkerAvailable = false;
 	    loader.style.display = "block";
     }
 });
 
 socket.on('markerInfo', (res) => {
     lineCharData(res.timeseries);
-    /*if (res.success){
-        lineCharData(res.timeseries);
-    }*/
-    select.disabled = false;
-    select2.disabled = false;
-    button.disabled = false;
-    slider.disabled = false;
-    isAvailable = true;
+    isMarkerAvailable = true;
 	loader.style.display = "none";
 })
-
 
 function Years() {
     var elm = document.getElementById('Year'),
@@ -256,7 +221,25 @@ function removeOptions(selectElement) {
        selectElement.remove(i);
     }
  }
- 
+
+function changeMarkerYear() {
+    let yearSelector = document.getElementById('markerYearSelector');
+    markerYear = yearSelector.value;
+
+    if (markerYear == (currDate.getFullYear()).toString()){
+        startDate = '2021-01-01';
+        endDate = todayDate;
+    } else if (markerYear == "2018") {
+        startDate = '2018-07-30';
+        endDate = '2018-12-31';
+    }  else {
+        startDate = markerYear + '-01-01';
+        endDate = markerYear + '-12-31';
+    }
+    getMeasurements(lat, lng)
+	loader.style.display = "block";
+}
+
 function MonthSelect() {
     var elm = document.getElementById('Month'),
     df = document.createDocumentFragment();
@@ -267,6 +250,7 @@ function MonthSelect() {
     var date = new Date();
     var month = date.getMonth();   
     date = date.getFullYear();
+
     if(yearSel.toString() == "2018"){
         init_value = 6;
         end__value = 12;
@@ -295,33 +279,29 @@ function MonthSelect() {
 
 
 function DateSel(){
-    if(isAvailable){
-        var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
-                    "May":"05","Jun":"06","Jul":"07","Ago":"08",
-                    "Sep":"09","0ct":"10","Nov":"11","Dic":"12"}
 
-        var Year = document.getElementById('Year').value;
-        var Month = document.getElementById('Month').value;
-        var m = Month.toString()
-        var StartDate = Year.toString() + '-' + nums[m] + '-' + "01"
-        var Mdays = 0;
-        if(m == "Ene" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Ago" || m == "Oct" ||m == "Dic")
-            Mdays = 31;
-        else if(m == "Nov" || m == "Abr" || m == "Jun" ||m == "Sep")
-            Mdays = 30;
-        else if(m == "Feb")
-            Mdays = 28;
-        var EndDate = Year.toString() + '-' + nums[m] + '-' + Mdays.toString();
-        var DateDict = {Start: StartDate, End:EndDate}
-        console.log(DateDict)
-        socket.emit('Mapviz', DateDict)
-        select.disabled = true;
-        select2.disabled = true;
-        button.disabled = true;
-        slider.disabled = true;
-        isAvailable = false;
-        loader.style.display = "block";    
-    }
+    var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
+                "May":"05","Jun":"06","Jul":"07","Ago":"08",
+                "Sep":"09","0ct":"10","Nov":"11","Dic":"12"}
+
+    var Year = document.getElementById('Year').value;
+    var Month = document.getElementById('Month').value;
+    var m = Month.toString()
+    var StartDate = Year.toString() + '-' + nums[m] + '-' + "01"
+    var Mdays = 0;
+    if(m == "Ene" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Ago" || m == "Oct" ||m == "Dic")
+        Mdays = 31;
+    else if(m == "Nov" || m == "Abr" || m == "Jun" ||m == "Sep")
+        Mdays = 30;
+    else if(m == "Feb")
+        Mdays = 28;
+    var EndDate = Year.toString() + '-' + nums[m] + '-' + Mdays.toString();
+    var DateDict = {Start: StartDate, End:EndDate}
+
+    socket.emit('Mapviz', DateDict)
+
+    loader.style.display = "block";    
+    
 }
 var colors = ['#D30000','#0018F9','#3BB143','#FFF200','#784B84','#FFFFFF',
               '#FC6600','#B200ED','#7C4700','#FA8072','#EFFD5F','#1C2951',
@@ -349,7 +329,7 @@ var rDict = {"-77.04,-12.04":'Lima',"-77.12,-12.02":'Aeropuerto Jorge Chávez',
              "-77.00,-12.10":'San Borja',"-76.97,-12.04":'Santa Anita_2'}
 
 function circleClick(e){
-   if(isAvailable){
+   if(isInterestLocationAvailable){
         console.log(e);
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
@@ -359,23 +339,16 @@ function circleClick(e){
         console.log(Distname)
         var dd = {Name:Distname} 
         socket.emit('HistData',dd);
-        select.disabled = true;
-        select2.disabled = true;
-        button.disabled = true;
-        slider.disabled = true;
-        isAvailable = false;
-        loader.style.display = "block";  
+        isInterestLocationAvailable = false;
    }
 }
 socket.on('Hist', (res) => {
     var dat = res.timeseries;
     changeROI(Distname,dat);
-    select.disabled = false;
-    select2.disabled = false;
-    button.disabled = false;
-    slider.disabled = false;
-    isAvailable = true;
-    loader.style.display = "none";
+    window.addEventListener('resize', function(event) {
+        window.location.reload();
+    });
+    isInterestLocationAvailable = true;
 })
 
 
@@ -390,14 +363,6 @@ for(let i = 0; i <18; i++){
     loc1.bindPopup(ROIs[2][i]);
 }
 socket.on('Link', (res) => {
-    select.disabled = false;
-    select2.disabled = false;
-    button.disabled = false;
-	slider.disabled = false;
-	isAvailable = true;
-   
-
-
 	map.removeLayer(no2Map);
     var link = res.Link;
     no2Map = L.tileLayer(link.toString()).addTo(map);
@@ -408,10 +373,12 @@ socket.on('Link', (res) => {
 var lineCharData = async (seriesData) => {
     data = Object.values(seriesData);
     var max_val = 0;
+
     for(let i = 0; i < data.length; i++){
         if(max_val < data[i][1])
             max_val = data[i][1]
     }
+
     Highcharts.chart('container', {
         chart: {
             zoomType: 'x'
@@ -421,7 +388,7 @@ var lineCharData = async (seriesData) => {
         },
     
         subtitle: {
-            text: 'Source: Google Earth Engine'
+            text: markerYear
         },
     
         yAxis: {
@@ -429,7 +396,7 @@ var lineCharData = async (seriesData) => {
                 text: 'Niveles de Concentración de NO2 en mol/m^2'
             },
             min: 0,     
-            max: max_val + max_val*0.5
+            max: max_val*1.5
         },
     
         xAxis: {
@@ -457,11 +424,6 @@ var lineCharData = async (seriesData) => {
             name: 'NO2',
             data: seriesData
         }
-        // ,
-        // {
-        //     name:'Permitted level by',
-        //     data: max_Limit
-        // }
     ],
     
         responsive: {
@@ -499,13 +461,3 @@ legend.onAdd = function(map) {
 };
 
 legend.addTo(map);
-
-
-/* 
-socket.on('newUserCoordinates', (coords) => {
-    console.log('New user is connected');
-    const marker = L.marker([coords.lat + 0.001, coords.lng+ 0.001]);
-    marker.bindPopup('Hello there!');
-    map.addLayer(marker);
-})
-*/

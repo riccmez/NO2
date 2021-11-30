@@ -4,10 +4,9 @@ body {
 }
 
 #map-template {
-    height: 1080px;
+    height: 100%;
     width: 100%;
-    z-index: 1;
-    position: relative;
+    position: absolute;
 }
 #box{
     /*
@@ -30,9 +29,6 @@ body {
 
 .timeSlider{
   background: black;
-}
-.cotainer2{
-    width: 50%;
 }
 
 .loader {

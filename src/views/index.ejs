@@ -35,9 +35,17 @@
 
         <div>
             <label class="sidebarLabel">Rango del Gráfico</label>
-            
-            <input type="range" min="2018" max="2021" value="2021" id="timeSlider" class="timeSlider" >
+            <select id="markerYearSelector" onChange="changeMarkerYear()">
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021" selected>2021</option>
+            </select>
+            <!--
+            <input type="range" min="2018" max="2021" value="2021" id="timeSlider" class="timeSlider" > 
             <label id="labelSlider"></label>
+            -->
+            
         </div>
         
 
@@ -45,40 +53,12 @@
         <br>
         <div id="container2" class="highcharts-figure"></div>
         <br>
-        
-
-        <!-- 
-        <ul>
-            <li class="active"><a href="#">Dashboard</a></li>
-            <li>
-                <a href="#" class="feat-btn">Features
-                <span class="fas fa-caret-down first"></span>
-                </a>
-                <ul class="feat-show">
-                    <li><a href="#">Pages</a></li>
-                    <li><a href="#">Elements</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="serv-btn">Services
-                <span class="fas fa-caret-down second"></span>
-                </a>
-                <ul class="serv-show">
-                    <li><a href="#">App Design</a></li>
-                    <li><a href="#">Web Design</a></li>
-                </ul>
-            </li>
-            <li><a href="#">Portfolio</a></li>
-            <li><a href="#">Overview</a></li>
-            <li><a href="#">Shortcuts</a></li>
-            <li><a href="#">Feedback</a></li>
-        </ul>
-        -->
     </nav>
 
     <div class="content">
-        <div id="map-template">
-        </div>
+        <div id="map-template"></div>
+    </div>
+    
         
     </div>
 
