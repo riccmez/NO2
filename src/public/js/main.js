@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function changeROI(name,data){
     Highcharts.chart('container2', {
+        chart: {
+            zoomType: 'x'
+        },  
+        
         title: {
             text: 'Nivel de Dióxido de Nitrogeno (Histórico)'
         },
@@ -409,6 +413,9 @@ var lineCharData = async (seriesData) => {
             max_val = data[i][1]
     }
     Highcharts.chart('container', {
+        chart: {
+            zoomType: 'x'
+        },  
         title: {
             text: 'Nivel de Dióxido de Nitrogeno (Marcador)'
         },
