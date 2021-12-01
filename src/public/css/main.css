@@ -24,9 +24,27 @@ body {
     text-align: left;
     font-size: 86%;
 }
+
+.OpacidadLabel{
+  position: relative;
+  left: 50px;
+}
+
 .custom-selector {
   position: relative;
-  left: 1vw;
+  margin-left: 15px;
+}
+
+.OP_selector{
+  position: relative;
+  margin-left: 15px;
+}
+
+.button{
+  position: relative;
+  left: 50px;
+  background: black;
+  color: white;
 }
 
 .timeSlider{

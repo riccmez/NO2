@@ -99,10 +99,19 @@ module.exports = (io) => {
         })
         
         function start1(lon, lat, startDate, endDate) {
-            return getMeasurements(lon, lat, startDate, endDate);
+            try {
+                return getMeasurements(lon, lat, startDate, endDate);
+              } catch (error) {
+                console.error(error);
+              }
         }
         function start2(StartDate, EndDate) {
-            return getLayerLink(StartDate, EndDate);
+            try {
+                return getLayerLink(StartDate, EndDate);
+              } catch (error) {
+                console.error(error);
+              }
+            
         }
 
         async function getMeasurements(lon, lat, startDate, endDate) {

@@ -25,19 +25,19 @@
     <nav class="sidebar">
         <div class="text"> UTEC NO2 Project</div>
         <br>
-
         <div>
-            <h3 class="sidebarLabel" > Visualización del Mapa</h3>
-        </div>
-        <br>
-        <div>
-            <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
-            <select class="custom-selector" id="Year" onChange="MonthSelect()"></select>
-            <select class="custom-selector" id="Month"></select> 
-            <label class="sidebarLabel">Opacidad</label>
-            <input type="range" min="0" max="1" value="0.5" step="0.1" id="OpacitySlider" class="OpacitySlider">
-            <label id="OpacityLabel"></label>
-            <button id="button" type="button" onClick="DateSel()">Mostrar</button>
+            
+            
+                <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
+                <select class="custom-selector" id="Year" onChange="MonthSelect()"></select>
+                <select class="custom-selector" id="Month"></select> 
+            
+            
+                <label class="OpacidadLabel">Opacidad</label>
+                <input class="OpacidadLabel" type="range" min="0" max="1" value="0.5" step="0.1" id="OpacitySlider" class="OpacitySlider">
+                <label class="OpacidadLabel" id="OpacityLabel"></label>
+                <button class="button" id="button" type="button" onClick="DateSel()">Mostrar</button>
+            
         </div>
         <br>
 
