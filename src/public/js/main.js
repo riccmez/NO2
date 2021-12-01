@@ -1,86 +1,80 @@
+// Inicializacion del gráfico del marcador
 document.addEventListener("DOMContentLoaded", function(event) { 
     let seriesData = [];
-    lineCharData(seriesData);
-
+    refreshMarkerChart(seriesData);
 });
 
-function changeROI(name,data){
-    Highcharts.chart('container2', {
-        chart: {
-            zoomType: 'x'
-        },  
-        
-        title: {
-            text: 'Nivel de Dióxido de Nitrogeno (Histórico)'
-        },
-
-        subtitle: {
-            text: 'ROI: ' + name + ' (2018-2021)'
-        },
-
-        yAxis: {
-            title: {
-                text: 'Niveles de Concentración de NO2 en mol/m^2 Lima'
-            },
-            min: 0,     
-            max: 0.0004
-        },
-
-        xAxis: {
-            type: 'datetime',
-            labels: {
-                format: '{value:%Y-%m-%e}'
-            },
-        },
-
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
-
-        plotOptions: {
-            series: {
-                label: {
-                    connectorAllowed: false
-                }
-            }
-        },
-
-        series: [{
-            name: 'NO2',
-            data: data
-        }],
-
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                    }
-                }
-            }]
-        }
-
-    });
-}
-
+// Inicialización de variables
 var Distname = "";
-// Initial Map
 var currDate = new Date();
 var todayDate = currDate.getFullYear()+'-'+(currDate.getMonth()+1)+'-'+currDate.getDate();
 var startDate = '2021-01-01';
 var endDate = todayDate;
-
 var lat = 0;
 var lng = 0;
+const socket = io();
+var markerYear = "2021";
+var isMarkerAvailable = true;
+var isInterestLocationAvailable = true;
 
-async function getMeasurements(lat, lng) {
+// Inicialización del mapa
+var map = L.map('map-template').setView([-12.046374, -77.042793], 13);
+
+var layerGroup = L.layerGroup().addTo(map);
+
+var select = document.getElementById('Year');
+var select2 = document.getElementById('Month');
+var button = document.getElementById('button');
+var loader = document.getElementById('spinLoader');
+showLoader(false);
+
+var OP_slider = document.getElementById("OpacitySlider");
+var OP_Label = document.getElementById("OpacityLabel");
+var opacity = 0.5;
+
+OP_Label.innerHTML = (OP_slider.value*100).toString() + "%";
+OP_slider.oninput = function(){
+    OP_Label.innerHTML = (OP_slider.value*100).toString() + "%";
+    opacity = OP_slider.value;
+}
+
+// Inicialización de controlador de capas
+var openstreet = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+openstreet.addTo(map);
+var no2Map= L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+var baseMaps = {
+	"Map": openstreet,
+};
+var overlayMaps = {
+	"NO2 layer": no2Map
+};
+LayerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+var DateDict = {Start: '2021-10-01', End:'2021-10-15'}
+console.log("cargando primera capa")
+showLoader(true);
+socket.emit('Mapviz', DateDict)
+
+/*  Funciones secundarias  */
+
+function clearLayers() {
+    layerGroup.clearLayers();
+    map.closePopup();
+}
+
+function showLoader(enable){
+    if (enable)
+        loader.style.display = "block";
+    else 
+        loader.style.display = "none";
+}
+
+/*  Funciones del Marcador  */
+
+// Funcion que pide las mediciones al servidor
+async function requestMeasurements(lat, lng) {
     const msg = {
         lat: lat,
         lng: lng,
@@ -90,87 +84,60 @@ async function getMeasurements(lat, lng) {
     socket.emit('userCoordinates', msg);
 }
 
-var select = document.getElementById('Year');
-var select2 = document.getElementById('Month');
-var button = document.getElementById('button');
-var loader = document.getElementById('spinLoader');
-loader.style.display = "none";
-
-
-var map = L.map('map-template').setView([-12.046374, -77.042793], 13)
-var openstreet = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');//'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
-openstreet.addTo(map);
-var no2Map= L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
-
-var baseMaps = {
-	"Map": openstreet,
-};
-
-var overlayMaps = {
-	"NO2 layer": no2Map
-};
-L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-const socket = io();
-var markerYear = "2021";
-var isMarkerAvailable = true;
-var isInterestLocationAvailable = true;
-var layerGroup = L.layerGroup().addTo(map);
-
-
-
-var DateDict = {Start: '2021-10-01', End:'2021-10-15'}
-console.log("cargando primera capa")
-loader.style.display = "block";
-socket.emit('Mapviz', DateDict)
-
-/*
-select.disabled = true;
-select2.disabled = true;
-button.disabled = true;
-slider.disabled = true;
-*/
-
+// Solicitud de ubicacion del usuario
 map.locate({enableHighAccuracy: true});
-
 map.on('locationfound', e => {
     if (isMarkerAvailable) {
-        layerGroup.clearLayers();
-        map.closePopup();
-        const coords = [e.latlng.lat, e.latlng.lng]
-        lat = e.latlng.lat;
-        lng = e.latlng.lng;
+        clearLayers();
+        let coords = [e.latlng.lat, e.latlng.lng]
+        lat = coords[0]; lng = coords[1];
         const marker = L.marker(coords).addTo(map);
         marker.addTo(layerGroup);
-        marker.bindPopup("Ubicación actual estimada <br> <b>Lon: </b>" + lng +" <br> <b>Lat: </b>" + lat).openPopup();
-        //map.addLayer(marker);
-        getMeasurements(e.latlng.lat, e.latlng.lng);
+        marker.bindPopup("Ubicación actual estimada <br> <b>Lon: </b>" + lng.toFixed(2) + "<br> <b>Lat: </b>" + lat.toFixed(2)).openPopup();
+        requestMeasurements(e.latlng.lat, e.latlng.lng);
         isMarkerAvailable = false;
-	    loader.style.display = "block";
+	    showLoader(true);
     }
 });
 
-
+// 
 map.on('click', function(e) {
     if (isMarkerAvailable) {
-        layerGroup.clearLayers();
-        map.closePopup();
+        clearLayers();
         const coords = [e.latlng.lat, e.latlng.lng]
-        lat = e.latlng.lat;
-        lng = e.latlng.lng;
+        lat = coords[0]; lng = coords[1];
         const marker = L.marker(coords).addTo(map);
         marker.addTo(layerGroup);
-        marker.bindPopup("<b>Lon: </b>" + lng +" <br> <b>Lat: </b>" + lat).openPopup();
-        getMeasurements(e.latlng.lat, e.latlng.lng);
+        marker.bindPopup("<b>Lon: </b>" + lng.toFixed(2) +" <br> <b>Lat: </b>" + lat.toFixed(2)).openPopup();
+        requestMeasurements(e.latlng.lat, e.latlng.lng);
         isMarkerAvailable = false;
-	    loader.style.display = "block";
+	    showLoader(true);
     }
 });
 
+function changeMarkerYear() {
+    let yearSelector = document.getElementById('markerYearSelector');
+    markerYear = yearSelector.value;
+
+    if (markerYear == (currDate.getFullYear()).toString()){
+        startDate = '2021-01-01';
+        endDate = todayDate;
+    } else if (markerYear == "2018") {
+        startDate = '2018-07-30';
+        endDate = '2018-12-31';
+    }  else {
+        startDate = markerYear + '-01-01';
+        endDate = markerYear + '-12-31';
+    }
+    requestMeasurements(lat, lng)
+	showLoader(true);
+}
+
+// Funcion que se activa cuando el servidor proporciona las mediciones solicitidas
 socket.on('markerInfo', (res) => {
-    lineCharData(res.timeseries);
+    refreshMarkerChart(res.timeseries);
     isMarkerAvailable = true;
-	loader.style.display = "none";
+	showLoader(false);
 })
 
 function Years() {
@@ -212,6 +179,7 @@ function MonthInit() {
     }
     elm.appendChild(df);
 }
+
 MonthInit();
 
 
@@ -220,24 +188,6 @@ function removeOptions(selectElement) {
     for(i = L; i >= 0; i--) {
        selectElement.remove(i);
     }
- }
-
-function changeMarkerYear() {
-    let yearSelector = document.getElementById('markerYearSelector');
-    markerYear = yearSelector.value;
-
-    if (markerYear == (currDate.getFullYear()).toString()){
-        startDate = '2021-01-01';
-        endDate = todayDate;
-    } else if (markerYear == "2018") {
-        startDate = '2018-07-30';
-        endDate = '2018-12-31';
-    }  else {
-        startDate = markerYear + '-01-01';
-        endDate = markerYear + '-12-31';
-    }
-    getMeasurements(lat, lng)
-	loader.style.display = "block";
 }
 
 function MonthSelect() {
@@ -277,7 +227,6 @@ function MonthSelect() {
     elm.appendChild(df);
 }
 
-
 function DateSel(){
 
     var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
@@ -300,12 +249,9 @@ function DateSel(){
 
     socket.emit('Mapviz', DateDict)
 
-    loader.style.display = "block";    
+    showLoader(true);   
     
 }
-var colors = ['#D30000','#0018F9','#3BB143','#FFF200','#784B84','#FFFFFF',
-              '#FC6600','#B200ED','#7C4700','#FA8072','#EFFD5F','#1C2951',
-              '#01796F','#B47EDE','#E4CD05','#EC5578','#008ECC','#B660CD']
 
 var ROIs = [[-77.04,-77.12,-77.01,-77.01,-76.99,-76.94,
              -77.06,-77.04,-77.04,-76.98,-77.02,-76.91,
@@ -343,75 +289,110 @@ function circleClick(e){
    }
 }
 socket.on('Hist', (res) => {
-    var dat = res.timeseries;
-    changeROI(Distname,dat);
-    window.addEventListener('resize', function(event) {
-        window.location.reload();
-    });
+    refreshROIChart(res.timeseries)
     isInterestLocationAvailable = true;
 })
 
-
+function refreshROIChart(timeseries) {
+    let _title = "Nivel de Dióxido de Nitrogeno (Histórico)";
+    let _subtitle = "ROI: " + Distname;
+    let yTitle = "Niveles de Concentración de NO2 en mol/m^2 Lima";
+    let yScale = {min: 0,max: 0.0004};
+    let serie = {name:'NO2', data: timeseries};
+    createChart('container2', _title, _subtitle, yTitle, yScale,serie);
+}
+function refreshMarkerChart(timeseries) {
+    let _title = "Nivel de Dióxido de Nitrogeno (Marcador)";
+    let _subtitle = markerYear;
+    let yTitle = "Niveles de Concentración de NO2 en mol/m^2";
+    let yScale = {min: 0,max: 0.0004};
+    let serie = {name:'NO2', data: timeseries};
+    createChart('container', _title, _subtitle, yTitle, yScale,serie);
+}
+var ROI_18 = L.layerGroup(); 
 for(let i = 0; i <18; i++){
     var loc1 = L.circle([ROIs[1][i],ROIs[0][i]], {
         color: 'black',
         fillColor: 'black',
         fillOpacity: 0.5,
         radius: 500
-    }).addTo(map);
+    });
+    loc1.addTo(ROI_18);
     loc1.on("click",circleClick);
     loc1.bindPopup(ROIs[2][i]);
 }
+ROI_18.addTo(map);
+LayerControl.addOverlay(ROI_18,"NO2 ROIs");
+
 socket.on('Link', (res) => {
-	map.removeLayer(no2Map);
+    var Month = (document.getElementById('Month')).value;
+    var Year = (document.getElementById('Year')).value;
+    var label = Year.toString() + " " + Month.toString();
+
+    LayerControl.removeLayer(no2Map);
+    map.removeLayer(no2Map);
     var link = res.Link;
-    no2Map = L.tileLayer(link.toString()).addTo(map);
-	loader.style.display = "none";
+    no2Map = L.tileLayer(link.toString(),{
+        attribution: '&copy; <a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_OFFL_L3_NO2?hl=en">Google Earth Engine</a> contributors',
+        opacity: opacity
+    }).addTo(map);
+    LayerControl.addOverlay(no2Map,label);
+	showLoader(false)
 });
+/*Legend specific*/
+var legend = L.control({ position: "topright" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>&micromol/m<sup>2</sup></h4>";
+  div.innerHTML += '<i style="background: #FE6868"></i><span>200 - 150</span><br>';
+  div.innerHTML += '<i style="background: #FEF768"></i><span>150 - 100</span><br>';
+  div.innerHTML += '<i style="background: #7BC768"></i><span>100 - 50</span><br>';
+  div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 0</span><br>';
+  div.innerHTML += '<span>Sin color-No registrado</span><br>';
+  return div;
+};
+
+legend.addTo(map);
 
 
-var lineCharData = async (seriesData) => {
-    data = Object.values(seriesData);
-    var max_val = 0;
+/*
+select.disabled = true;
+select2.disabled = true;
+button.disabled = true;
+slider.disabled = true;
+*/
 
-    for(let i = 0; i < data.length; i++){
-        if(max_val < data[i][1])
-            max_val = data[i][1]
-    }
 
-    Highcharts.chart('container', {
+function createChart(containerId, _title, _subtitle, yTitle, yScale,serie) {
+    Highcharts.chart(containerId, {
         chart: {
             zoomType: 'x'
         },  
         title: {
-            text: 'Nivel de Dióxido de Nitrogeno (Marcador)'
+            text: _title
         },
-    
         subtitle: {
-            text: markerYear
+            text: _subtitle
         },
-    
         yAxis: {
             title: {
-                text: 'Niveles de Concentración de NO2 en mol/m^2'
+                text: yTitle
             },
-            min: 0,     
-            max: max_val*1.5
+            min: yScale.min,     
+            max: yScale.max
         },
-    
         xAxis: {
             type: 'datetime',
             labels: {
                 format: '{value:%Y-%m-%e}'
             },
         },
-    
         legend: {
             layout: 'vertical',
             align: 'right',
             verticalAlign: 'middle'
         },
-    
         plotOptions: {
             series: {
                 label: {
@@ -419,13 +400,7 @@ var lineCharData = async (seriesData) => {
                 }
             }
         },
-    
-        series: [{
-            name: 'NO2',
-            data: seriesData
-        }
-    ],
-    
+        series: [serie],
         responsive: {
             rules: [{
                 condition: {
@@ -440,24 +415,5 @@ var lineCharData = async (seriesData) => {
                 }
             }]
         }
-    
     });
 }
-
-/*Legend specific*/
-var legend = L.control({ position: "topright" });
-
-legend.onAdd = function(map) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>&micromol/m<sup>2</sup></h4>";
-  div.innerHTML += '<i style="background: #FE6868"></i><span>200 - 150</span><br>';
-  div.innerHTML += '<i style="background: #FEF768"></i><span>150 - 100</span><br>';
-  div.innerHTML += '<i style="background: #7BC768"></i><span>100 - 50</span><br>';
-  div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 0</span><br>';
-  
-  
-
-  return div;
-};
-
-legend.addTo(map);

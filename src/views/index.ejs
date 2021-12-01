@@ -25,17 +25,25 @@
     <nav class="sidebar">
         <div class="text"> UTEC NO2 Project</div>
         <br>
+
+        <div>
+            <h3 class="sidebarLabel" > Visualización del Mapa</h3>
+        </div>
+        <br>
         <div>
             <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
-            <select id="Year" onChange="MonthSelect()"></select>
-            <select id="Month"></select> 
+            <select class="custom-selector" id="Year" onChange="MonthSelect()"></select>
+            <select class="custom-selector" id="Month"></select> 
+            <label class="sidebarLabel">Opacidad</label>
+            <input type="range" min="0" max="1" value="0.5" step="0.1" id="OpacitySlider" class="OpacitySlider">
+            <label id="OpacityLabel"></label>
             <button id="button" type="button" onClick="DateSel()">Mostrar</button>
         </div>
         <br>
 
         <div>
             <label class="sidebarLabel">Rango del Gráfico</label>
-            <select id="markerYearSelector" onChange="changeMarkerYear()">
+            <select class="custom-selector" id="markerYearSelector" onChange="changeMarkerYear()">
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
                 <option value="2020">2020</option>

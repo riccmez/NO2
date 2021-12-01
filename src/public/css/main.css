@@ -18,13 +18,15 @@ body {
 
 
 
-#sidebarLabel{
-    /*position: absolute;
-    color: white;
-    left: 1%;*/
-    margin-left: 10px;
+.sidebarLabel{
+    position: relative;
+    left: 1vw;
     text-align: left;
     font-size: 86%;
+}
+.custom-selector {
+  position: relative;
+  left: 1vw;
 }
 
 .timeSlider{
