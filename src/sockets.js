@@ -133,7 +133,7 @@ module.exports = (io) => {
                 min: 0,
                 max: 0.0002 ,
                 palette: ['blue', 'green', 'yellow', 'red'],
-                opacity: 0.45
+                opacity: 1
             }
         
             // Colleción de imagenés del satélite

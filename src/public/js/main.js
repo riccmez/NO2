@@ -32,10 +32,10 @@ var OP_slider = document.getElementById("OpacitySlider");
 var OP_Label = document.getElementById("OpacityLabel");
 var opacity = 0.5;
 
-OP_Label.innerHTML = (OP_slider.value*100).toString() + "%";
+OP_Label.innerHTML = (OP_slider.value).toString() + "%";
 OP_slider.oninput = function(){
-    OP_Label.innerHTML = (OP_slider.value*100).toString() + "%";
-    opacity = OP_slider.value;
+    OP_Label.innerHTML = (OP_slider.value).toString() + "%";
+    opacity = (OP_slider.value/100).toFixed(2);
 }
 
 // Inicialización de controlador de capas
