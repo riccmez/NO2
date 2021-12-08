@@ -3,7 +3,7 @@ var spawn = require('child_process').spawn;
 
 // Require client library and private key.
 var ee = require('@google/earthengine');
-var privateKey = require('./ee_api_key.json');
+var privateKey = require('./PrivateKey.json');
 var SG = require('ml-savitzky-golay-generalized');
 
 var bbPromise = require('bluebird');
@@ -58,12 +58,12 @@ module.exports = (io) => {
                     })();
 
                 }, function(e) {
-                    console.error('Initialization error: ' + e);
+                    console.error('Initialization error: ' + e + ' 1');
                 });
             };
 
             ee.data.authenticateViaPrivateKey(privateKey, runAnalysis, function(e) {
-                console.error('Authentication error: ' + e);
+                console.error('Authentication error1: ' + e);
             });
         })
 
@@ -85,7 +85,7 @@ module.exports = (io) => {
               
               // Authenticate using a service account.
               ee.data.authenticateViaPrivateKey(privateKey, runAnalysis, function(e) {
-                console.error('Authentication error: ' + e);
+                console.error('Authentication error2: ' + e);
               });
         })
 

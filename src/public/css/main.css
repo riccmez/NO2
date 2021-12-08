@@ -30,6 +30,13 @@ body {
   left: 50px;
 }
 
+.warning{
+  position: relative;
+  left: 10px;
+  font-size: small;
+  color: rgb(190, 0, 0);
+}
+
 .custom-selector {
   position: relative;
   margin-left: 15px;

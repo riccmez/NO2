@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let seriesData = [];
     refreshMarkerChart(seriesData);
 });
-
+document.getElementById('Warn').style.display="none";
 // Inicialización de variables
 var Distname = "";
 var currDate = new Date();
@@ -143,11 +143,11 @@ socket.on('markerInfo', (res) => {
 function Years() {
     var elm = document.getElementById('Year'),
     df = document.createDocumentFragment();
-    var startDate = new Date("2018/7/30")
+    var startDate = new Date("2018/07/01")
     var today = new Date();
     var loop = new Date(startDate);
-    while(loop < today) {
-  		var year = loop.getFullYear();        
+    while(loop.getFullYear() < (today.getFullYear() + 1)) {
+        var year = loop.getFullYear();        
         var optionLabel1 = year;
         var option = document.createElement('option');
         option.value = optionLabel1.toString()
@@ -162,9 +162,9 @@ Years();
 var months = {0:"Ene",1:"Feb",2:"Mar",3:"Abr",
               4:"May",5:"Jun",6:"Jul",7:"Ago",
               8:"Sep",9:"Oct",10:"Nov",11:"Dic"}
-var months2 = {0:"01",1:"02",2:"03",3:"04",
-              4:"05",5:"06",6:"07",7:"08",
-              8:"09",9:"10",10:"11",11:"00"}
+var months2 = {"1":1,"2":2,"3":3,"4":4,
+               "5":5,"6":6,"7":7,"8":8,
+               "9":9,"10":10,"11":11,"12":12}
 
 function MonthInit() {
     var elm = document.getElementById('Month'),
@@ -198,20 +198,32 @@ function MonthSelect() {
     var init_value = 0;
     var end__value = months.length;
     var date = new Date();
-    var month = date.getMonth();   
+    var month = date.getMonth();
     date = date.getFullYear();
-
     if(yearSel.toString() == "2018"){
         init_value = 6;
         end__value = 12;
+        if(document.getElementById('Warn').style.display == "block"){
+            document.getElementById('Warn').style.display = "none";
+        }
     }
     else if(yearSel.toString() == date.toString()){
         init_value = 0;
-        end__value = months2[month.toString()]-1;
+        end__value = months2[month.toString()];
+        console.log(month.toString());
+        if(month.toString() == 0){
+            if(document.getElementById('Warn').style.display == "none"){
+                document.getElementById('Warn').style.display = "block";
+            }
+            console.log("The satelitte has not recorded the data for this month")
+        }
     }
     else if(yearSel.toString != "2018" || yearSel.toString != date.toString()){
         init_value = 0;
         end__value = 12;
+        if(document.getElementById('Warn').style.display == "block"){
+            document.getElementById('Warn').style.display = "none";
+        }
     }
     
     // using the function:
@@ -322,12 +334,12 @@ for(let i = 0; i <18; i++){
     loc1.bindPopup(ROIs[2][i]);
 }
 ROI_18.addTo(map);
-LayerControl.addOverlay(ROI_18,"NO2 ROIs");
+LayerControl.addOverlay(ROI_18,"NO2 lugares de interés");
 
 socket.on('Link', (res) => {
     var Month = (document.getElementById('Month')).value;
     var Year = (document.getElementById('Year')).value;
-    var label = Year.toString() + " " + Month.toString();
+    var label = "Capa NO2: "+ Year.toString() + " " + Month.toString();
 
     LayerControl.removeLayer(no2Map);
     map.removeLayer(no2Map);
