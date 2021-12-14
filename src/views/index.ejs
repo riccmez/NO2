@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nodejs Leaflet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calidad de Aire - UTEC</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/dateSelect.css">
@@ -28,7 +28,7 @@
         <div>
             
             
-                <label class="sidebarLabel" for="DateSelect">Rango del Mapa</label> 
+                <label class="sidebarLabel" for="DateSelect">Visualización del mes</label> 
                 <select class="custom-selector" id="Year" onChange="MonthSelect()"></select>
                 <select class="custom-selector" id="Month"></select> 
             
@@ -66,11 +66,180 @@
     <div class="content">
         <div id="map-template"></div>
     </div>
-    
+    <div class="btTxt_submit" id="myBtn"></div>
+
+        <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <br><br>
+        <div class="tab">
+          <button class="tablinks" onclick="openCity(event, 'Descripcion')" id="defaultOpen">Descripción</button>
+          <button class="tablinks" onclick="openCity(event, 'Satelite')">Satélite</button>
+          <button class="tablinks" onclick="openCity(event, 'Desarrolladores')">Desarrolladores</button>
+        </div>
         
+        <div id="Descripcion" class="tabcontent">
+          <h2>Calidad de Aire</h2>
+          <p class="description">Este es un projecto realizado por estudiantes de UTEC con el objetivo de estudiar 
+             los efectos de la cuarentena causada por el pandemia del virus SARS-CoV-2. 
+             Esta aplicación se web se basa de la investigación "Air quality analysis in Lima-Peru using the NO<sub>2</sub> levels during the COVID-19 pandemic lockdown" 
+             escrita por los alumnos <a href="https://www.linkedin.com/in/diego-velayarce-r/?originalSubdomain=pe">Diego Velayarce</a>,
+            <a href="https://www.linkedin.com/in/qespisisa-bustos/?originalSubdomain=pe">Qespisisa Bustos</a>, 
+            <a href="https://www.linkedin.com/in/maria-paz-garcia-veramatus/?originalSubdomain=pe">María Paz García</a>, 
+            <a href="https://www.linkedin.com/in/camila-timana/?originalSubdomain=pe">Camila Timana Mendoza</a>, 
+            el director del Departamento de Ciencias de UTEC <a href="https://www.linkedin.com/in/danielhorna/">Daniel Horna Muñoz, Ph. D.</a>, y el profesor 
+            <a href="https://www.linkedin.com/in/victor-murray/">Victor Murray, Ph. D.</a> (Senior Member, IEEE)</p>
+        </div>
+        
+        <div id="Satelite" class="tabcontent">
+          <h3>Satelite</h3>
+          <p>Sentinel-5P OFFL NO2: Offline Nitrogen Dioxide</p>
+          <h3>Provedor de datos</h3>
+          <p><a href="https://sentinel.esa.int/web/sentinel/user-guides/sentinel-5p-tropomi">European Union/ESA/Copernicus</a></p>
+          <h3>Resolución</h3>
+          <p>1113.2 metros</p>
+          <h3>Banda utilizada</h3>
+          <p>tropospheric_NO2_column_number_density</p>
+          <h3>Unidades</h3>
+          <p>mol/m<sup>2</sup></p>
+          <p>Min: -0.00051</p>
+          <p>Max: 0.0192</p>
+          
+        </div>
+        
+        <div id="Desarrolladores" class="tabcontent">
+        <div class="row">
+          <div class="column">
+            <div class="card0">
+              <img src="Victor.png" alt="Avatar" style="width:100%">
+              <h3>Victor Murray</h3>
+              <p class="title2">PhD in Electrical Engineering </p>
+              <p>Asesor de Projecto</p>
+              <a href="https://www.linkedin.com/in/victor-murray/"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card1">
+              <img src="Noe.png" alt="Avatar" style="width:100%">
+              <h3>Noe Salvatierra</h3>
+              <p class="title2">Estudiante de Ingeniería Electrónica</p>
+              <p>UTEC</p>
+              <a href="https://www.linkedin.com/in/noe-salvatierra-cotrina-1624a912b/"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+          
+          <div class="column">
+            <div class="card2">
+              <img src="Ricardo.png" alt="Avatar" style="width:100%">
+              <h3>Ricardo Carbajal</h3>
+              <p class="title2">Estudiante de Ingeniería Electrónica</p>
+              <p>UTEC</p>
+              <a href="https://www.linkedin.com/in/ricardo-carbajal-mezarina-3a6911148"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+          
+        </div>
+        </div>
+        <!-- <h2 >NO2 Air Quality Web App</h2>
+        <br>
+        <h4>Descripción del Projecto</h4>
+        <h4>Satélite</h4>
+        <h4>Desarrolladores</h4>
+        <br>
+        <div class="row">
+          <div class="column">
+            <div class="card0">
+              <img src="img_avatar.png" alt="Avatar" style="width:100%">
+              <h3>Victor Murray</h3>
+              <p class="title2">PhD in Electrical Engineering </p>
+              <p>Asesor de Projecto</p>
+              <a href="#"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card1">
+              <img src="img_avatar.png" alt="Avatar" style="width:100%">
+              <h3>Noe Salvatierra</h3>
+              <p class="title2">Estudiante de Ingeniería Electrónica</p>
+              <p>UTEC</p>
+              <a href="#"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+          
+          <div class="column">
+            <div class="card2">
+              <img src="img_avatar.png" alt="Avatar" style="width:100%">
+              <h3>Ricardo Carbajal</h3>
+              <p class="title2">Estudiante de Ingeniería Electrónica</p>
+              <p>UTEC</p>
+              <a href="#"><i class="icon"></i></a>
+              <br>
+            </div>
+          </div>
+          
+        </div> -->
+    
+      </div>
+
+    </div>
     </div>
 
+    <script>
+      function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+      
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("defaultOpen").click();
+      </script>
 
+    <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+      
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+      
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      
+      // When the user clicks the button, open the modal 
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      </script>
     <script>
         $('.btn').click(function(){
           $(this).toggleClass("click");

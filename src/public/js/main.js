@@ -52,7 +52,7 @@ var overlayMaps = {
 };
 LayerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-var DateDict = {Start: '2021-10-01', End:'2021-10-15'}
+var DateDict = {Start: '2018-07-01', End:'2018-07-31'}
 console.log("cargando primera capa")
 showLoader(true);
 socket.emit('Mapviz', DateDict)
@@ -243,7 +243,7 @@ function DateSel(){
 
     var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
                 "May":"05","Jun":"06","Jul":"07","Ago":"08",
-                "Sep":"09","0ct":"10","Nov":"11","Dic":"12"}
+                "Sep":"09","Oct":"10","Nov":"11","Dic":"12"}
 
     var Year = document.getElementById('Year').value;
     var Month = document.getElementById('Month').value;

@@ -108,3 +108,179 @@ body {
     background-size: 18px;
     background-color: rgba(255, 255, 255, 1);
   }
+
+.btTxt_submit{
+  background-image: url('./information.png');
+  background-size: cover;
+  background-position: 50% 50%; 
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  padding: 0%;
+  margin: 0%;
+  top: 92.5%;
+  right: 0%;
+  left: 96%;
+}
+
+/* Popup info about the project*/
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 15px;
+  border: 1px solid #888;
+  width: 40%;
+  min-width: 865px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.column {
+  float: left;
+  min-width: 200px;
+  max-width: 650px;
+  padding: 0 25px;
+
+
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {
+  margin: 0 -5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 700px) {
+  .column {
+    width: 30%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card0{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 0px;
+  text-align: center;
+  background-color: #f1f1f1;
+  max-width: 220px;
+  min-height: 390px;
+  margin-left: -5px;
+}
+.card1{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 0px;
+  text-align: center;
+  background-color: #f1f1f1;
+  max-width: 220px;
+  min-height: 390px;
+}
+.card2{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 0px;
+  text-align: center;
+  background-color: #f1f1f1;
+  max-width: 220px;
+  min-height: 390px;
+}
+
+.title2{
+  color: grey;
+  font-size: 16px;
+}
+.a2{
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+.icon{
+  width: 24px;
+  height: 24px;
+  background-image: url('./linkedin-logo.png');
+  background-size: cover;
+  position: absolute;
+  margin-top: 3px;
+  margin-left: -11px;
+  z-index: auto;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.description{
+  text-align: justify;
+}
