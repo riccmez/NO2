@@ -28,8 +28,8 @@
         <div>
             
             
-                <label class="sidebarLabel" for="DateSelect">Visualización del mes</label> 
-                <select class="custom-selector" id="Year" onChange="MonthSelect()"></select>
+                <label class="sidebarLabel">Visualización del mes</label> 
+                <select class="custom-selector" id="Year" onChange="MonthSelect('Month', 'Year', 'Warn1')"></select>
                 <select class="custom-selector" id="Month"></select> 
             
             
@@ -38,17 +38,30 @@
                 <label class="OpacidadLabel" id="OpacityLabel"></label>
                 <button class="button" id="button" type="button" onClick="DateSel()">Mostrar</button>
                 <br>
-                <label class="warning" id="Warn"> No hay data registrada para este mes <Label>
+                <label class="warning" id="Warn1"> No hay data registrada para este mes <Label>
         </div>
         <br>
         <div>
-            <label class="sidebarLabel">Rango del Gráfico</label>
-            <select class="custom-selector" id="markerYearSelector" onChange="changeMarkerYear()">
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021" selected>2021</option>
-            </select>
+            <label class="sidebarLabel">Rango del Gráfico:</label>
+            <br>
+            <label class="sidebarLabel">Inicio:</label> 
+            <select class="custom-selector" id="startYear" onChange="MonthSelect('startMonth', 'startYear', 'Warn2')"></select>
+            <select class="custom-selector" id="startMonth"></select>
+            <label class="sidebarLabel">Fin:</label> 
+            <select class="custom-selector" id="endYear" onChange="MonthSelect('endMonth', 'endYear', 'Warn2')"></select>
+            <select class="custom-selector" id="endMonth"></select>
+            <button class="button" id="button2" type="button" onClick="DateSel2()">Actualizar</button>
+            <br>
+            <label class="warning" id="Warn2"> No hay data registrada para este mes</Label>
+            <!--
+              <select class="custom-selector" id="markerYearSelector" onChange="changeMarkerYear()">
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021" selected>2021</option>
+              </select>
+
+            -->
             <!--
             <input type="range" min="2018" max="2021" value="2021" id="timeSlider" class="timeSlider" > 
             <label id="labelSlider"></label>

@@ -3,7 +3,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let seriesData = [];
     refreshMarkerChart(seriesData);
 });
-document.getElementById('Warn').style.display="none";
+document.getElementById('Warn1').style.display="none";
+document.getElementById('Warn2').style.display="none";
 // Inicialización de variables
 var Distname = "";
 var currDate = new Date();
@@ -140,12 +141,44 @@ socket.on('markerInfo', (res) => {
 	showLoader(false);
 })
 
-function Years() {
-    var elm = document.getElementById('Year'),
+function Years(stardate, endDate,year_id) {
+    var elm = document.getElementById(year_id),
+    df = document.createDocumentFragment();
+
+    
+    var loop = stardate;
+    while(loop.getFullYear() < (endDate.getFullYear() + 1)) {
+        var year = loop.getFullYear();        
+        var optionLabel1 = year;
+        var option = document.createElement('option');
+        option.value = optionLabel1.toString()
+        option.appendChild(document.createTextNode(optionLabel1));
+        df.appendChild(option);
+        let newDate = loop.setYear(loop.getFullYear() + 1);
+        loop = new Date(newDate);
+    }
+    elm.appendChild(df);
+}
+function Years2() {
+    var elm = document.getElementById('startYear'),
     df = document.createDocumentFragment();
     var startDate = new Date("2018/07/01")
     var today = new Date();
     var loop = new Date(startDate);
+    while(loop.getFullYear() < (today.getFullYear() )) {
+        var year = loop.getFullYear();        
+        var optionLabel1 = year;
+        var option = document.createElement('option');
+        option.value = optionLabel1.toString()
+        option.appendChild(document.createTextNode(optionLabel1));
+        df.appendChild(option);
+        let newDate = loop.setDate(loop.getDate() + 365);
+        loop = new Date(newDate);
+    }
+    elm.appendChild(df);
+
+    elm = document.getElementById('endYear'),
+    loop = new Date('2021/07/01');
     while(loop.getFullYear() < (today.getFullYear() + 1)) {
         var year = loop.getFullYear();        
         var optionLabel1 = year;
@@ -157,8 +190,14 @@ function Years() {
         loop = new Date(newDate);
     }
     elm.appendChild(df);
+
+
+
 }
-Years();
+let tempdate = new Date("2018/07/01");
+Years(tempdate, currDate, 'Year');
+Years2()
+
 var months = {0:"Ene",1:"Feb",2:"Mar",3:"Abr",
               4:"May",5:"Jun",6:"Jul",7:"Ago",
               8:"Sep",9:"Oct",10:"Nov",11:"Dic"}
@@ -166,8 +205,8 @@ var months2 = {"1":1,"2":2,"3":3,"4":4,
                "5":5,"6":6,"7":7,"8":8,
                "9":9,"10":10,"11":11,"12":12}
 
-function MonthInit() {
-    var elm = document.getElementById('Month'),
+function MonthInit(month_id) {
+    var elm = document.getElementById(month_id),
     df = document.createDocumentFragment();
     for(let i = 6; i < 12; i++){
         var optionLabel1 = months[i];
@@ -180,8 +219,9 @@ function MonthInit() {
     elm.appendChild(df);
 }
 
-MonthInit();
-
+MonthInit('Month');
+MonthInit('startMonth');
+MonthInit('endMonth');
 
 function removeOptions(selectElement) {
     var i, L = selectElement.options.length - 1;
@@ -190,21 +230,37 @@ function removeOptions(selectElement) {
     }
 }
 
-function MonthSelect() {
-    var elm = document.getElementById('Month'),
+function MonthSelect(id_month, id_year, id_warn) {
+    var elm = document.getElementById(id_month),
     df = document.createDocumentFragment();
-    var elm2 = document.getElementById('Year');
+    var elm2 = document.getElementById(id_year);
+    if (id_year == 'startYear') {
+        let temp = parseInt(elm2.value) + 1
+        let temp1 = new Date (temp.toString() +"/01/01")
+        removeOptions(document.getElementById('endYear'));
+        console.log(temp1)
+        console.log(currDate)
+        Years( temp1, currDate, 'endYear');
+    } else if (id_year == 'endYear') {
+        removeOptions(document.getElementById('startYear'));
+        let temp = parseInt(elm2.value) - 1
+        let temp1 = new Date ("2018/07/01")
+        let temp2 = new Date (temp.toString() +"/01/01")
+        Years( temp1, temp2, 'startYear');
+    }
     var yearSel = elm2.value
     var init_value = 0;
     var end__value = months.length;
     var date = new Date();
     var month = date.getMonth();
     date = date.getFullYear();
+    
+
     if(yearSel.toString() == "2018"){
         init_value = 6;
         end__value = 12;
-        if(document.getElementById('Warn').style.display == "block"){
-            document.getElementById('Warn').style.display = "none";
+        if(document.getElementById(id_warn).style.display == "block"){
+            document.getElementById(id_warn).style.display = "none";
         }
     }
     else if(yearSel.toString() == date.toString()){
@@ -212,8 +268,8 @@ function MonthSelect() {
         end__value = months2[month.toString()];
         console.log(month.toString());
         if(month.toString() == 0){
-            if(document.getElementById('Warn').style.display == "none"){
-                document.getElementById('Warn').style.display = "block";
+            if(document.getElementById(id_warn).style.display == "none"){
+                document.getElementById(id_warn).style.display = "block";
             }
             console.log("The satelitte has not recorded the data for this month")
         }
@@ -221,8 +277,8 @@ function MonthSelect() {
     else if(yearSel.toString != "2018" || yearSel.toString != date.toString()){
         init_value = 0;
         end__value = 12;
-        if(document.getElementById('Warn').style.display == "block"){
-            document.getElementById('Warn').style.display = "none";
+        if(document.getElementById(id_warn).style.display == "block"){
+            document.getElementById(id_warn).style.display = "none";
         }
     }
     
@@ -262,6 +318,39 @@ function DateSel(){
     socket.emit('Mapviz', DateDict)
 
     showLoader(true);   
+    
+}
+
+function DateSel2(){
+
+    var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
+                "May":"05","Jun":"06","Jul":"07","Ago":"08",
+                "Sep":"09","Oct":"10","Nov":"11","Dic":"12"}
+
+    var Year1 = document.getElementById('startYear').value;
+    var Month1 = document.getElementById('startMonth').value;
+    var m = Month1.toString()
+    var StartDate = Year1.toString() + '-' + nums[m] + '-' + "01"
+
+    var Year2 = document.getElementById('endYear').value;
+    var Month2 = document.getElementById('endMonth').value;
+    m = Month2.toString()
+    var Mdays = 0;
+    if(m == "Ene" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Ago" || m == "Oct" ||m == "Dic")
+        Mdays = 31;
+    else if(m == "Nov" || m == "Abr" || m == "Jun" ||m == "Sep")
+        Mdays = 30;
+    else if(m == "Feb")
+        Mdays = 28;
+    var EndDate = Year2.toString() + '-' + nums[m] + '-' + Mdays.toString();
+    
+    startDate = StartDate;
+    endDate = EndDate;
+    console.log(startDate);
+    console.log(endDate);
+    requestMeasurements(lat, lng);
+    isMarkerAvailable = false;
+    showLoader(true);
     
 }
 
