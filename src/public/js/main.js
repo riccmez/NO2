@@ -163,7 +163,7 @@ function Years2() {
     var elm = document.getElementById('startYear'),
     df = document.createDocumentFragment();
     var startDate = new Date("2018/07/01")
-    var today = new Date();
+    var today = currDate;
     var loop = new Date(startDate);
     while(loop.getFullYear() < (today.getFullYear() )) {
         var year = loop.getFullYear();        
@@ -172,13 +172,13 @@ function Years2() {
         option.value = optionLabel1.toString()
         option.appendChild(document.createTextNode(optionLabel1));
         df.appendChild(option);
-        let newDate = loop.setDate(loop.getDate() + 365);
+        let newDate = loop.setYear(loop.getFullYear() + 1);
         loop = new Date(newDate);
     }
     elm.appendChild(df);
 
     elm = document.getElementById('endYear'),
-    loop = new Date('2021/07/01');
+    loop = new Date('2019/01/01');
     while(loop.getFullYear() < (today.getFullYear() + 1)) {
         var year = loop.getFullYear();        
         var optionLabel1 = year;
@@ -186,7 +186,7 @@ function Years2() {
         option.value = optionLabel1.toString()
         option.appendChild(document.createTextNode(optionLabel1));
         df.appendChild(option);
-        let newDate = loop.setDate(loop.getDate() + 365);
+        let newDate = loop.setYear(loop.getFullYear() + 1);
         loop = new Date(newDate);
     }
     elm.appendChild(df);
@@ -196,7 +196,7 @@ function Years2() {
 }
 let tempdate = new Date("2018/07/01");
 Years(tempdate, currDate, 'Year');
-Years2()
+Years2();
 
 var months = {0:"Ene",1:"Feb",2:"Mar",3:"Abr",
               4:"May",5:"Jun",6:"Jul",7:"Ago",
@@ -208,7 +208,16 @@ var months2 = {"1":1,"2":2,"3":3,"4":4,
 function MonthInit(month_id) {
     var elm = document.getElementById(month_id),
     df = document.createDocumentFragment();
-    for(let i = 6; i < 12; i++){
+    let init_val = 0;
+    let end_val = 12;
+    if(month_id == 'startMonth' || month_id == 'Month'){
+        init_val = 6;
+    }
+    else{
+        init_val = 0;
+    }
+    console.log(end_val)
+    for(let i = init_val; i < end_val; i++){
         var optionLabel1 = months[i];
         var option = document.createElement('option');
         option.value = optionLabel1.toString()
@@ -251,7 +260,7 @@ function MonthSelect(id_month, id_year, id_warn) {
     var yearSel = elm2.value
     var init_value = 0;
     var end__value = months.length;
-    var date = new Date();
+    var date = currDate;
     var month = date.getMonth();
     date = date.getFullYear();
     
