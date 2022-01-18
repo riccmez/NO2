@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Calidad de Aire - UTEC</title>
+    <title>Air Quality - UTEC</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/dateSelect.css">
@@ -28,32 +28,32 @@
         <div>
             
             
-                <label class="sidebarLabel">Visualización del mes: </label> 
+                <label class="sidebarLabel">Map Range </label> 
                 <br>
                 <select class="custom-selector" id="Year" onChange="MonthSelect('Month', 'Year', 'Warn1')"></select>
                 <select class="custom-selector" id="Month"></select> 
             
             
-                <label class="OpacidadLabel">Opacidad</label>
+                <label class="OpacidadLabel">Opacity</label>
                 <input class="OpacidadLabel" type="range" min="35" max="100" value="50" step="5" id="OpacitySlider" class="OpacitySlider">
                 <label class="OpacidadLabel" id="OpacityLabel"></label>
-                <button class="button" id="button" type="button" onClick="DateSel()">Mostrar</button>
+                <button class="button" id="button" type="button" onClick="DateSel()">Show</button>
                 <br>
-                <label class="warning" id="Warn1"> No hay data registrada para este mes <Label>
+                <label class="warning" id="Warn1"> Data not registered for this month <Label>
         </div>
         <br>
         <div>
-            <label class="sidebarLabel">Rango del Gráfico:</label>
+            <label class="sidebarLabel">Chart Range:</label>
             <br>
-            <label class="sidebarLabel">Inicio:</label> 
+            <label class="sidebarLabel">Start:</label> 
             <select class="custom-selector" id="startYear" onChange="MonthSelect('startMonth', 'startYear', 'Warn2')"></select>
             <select class="custom-selector" id="startMonth"></select>
-            <label class="sidebarLabel">Fin:</label> 
+            <label class="sidebarLabel">End:</label> 
             <select class="custom-selector" id="endYear" onChange="MonthSelect('endMonth', 'endYear', 'Warn2')"></select>
             <select class="custom-selector" id="endMonth"></select>
-            <button class="button" id="button2" type="button" onClick="DateSel2()">Actualizar</button>
+            <button class="button" id="button2" type="button" onClick="DateSel2()">Update</button>
             <br>
-            <label class="warning" id="Warn2"> No hay data registrada para este mes</Label>
+            <label class="warning" id="Warn2"> Data not registered for this month</Label>
             <!--
               <select class="custom-selector" id="markerYearSelector" onChange="changeMarkerYear()">
                   <option value="2018">2018</option>
@@ -90,34 +90,35 @@
         <span class="close">&times;</span>
         <br><br>
         <div class="tab">
-          <button class="tablinks" onclick="openCity(event, 'Descripcion')" id="defaultOpen">Descripción</button>
-          <button class="tablinks" onclick="openCity(event, 'Satelite')">Satélite</button>
-          <button class="tablinks" onclick="openCity(event, 'Desarrolladores')">Desarrolladores</button>
+          <button class="tablinks" onclick="openCity(event, 'Descripcion')" id="defaultOpen">Project Description</button>
+          <button class="tablinks" onclick="openCity(event, 'Satelite')">Satellite</button>
+          <button class="tablinks" onclick="openCity(event, 'Desarrolladores')">Developers</button>
         </div>
         
         <div id="Descripcion" class="tabcontent">
           <h2>Calidad de Aire</h2>
-          <p class="description">Este es un proyecto realizado en UTEC con el objetivo de 
-            estudiar la calidad del aire utilizando como métrica los niveles de NO2 obtenidos desde el satélite Sentinel-5P. 
-             Esta aplicación  se basa en la investigación "Air quality analysis in Lima-Peru using the NO<sub>2</sub> 
-             levels during the COVID-19 pandemic lockdown" escrita por <a href="https://www.linkedin.com/in/diego-velayarce-r/?originalSubdomain=pe">Diego Velayarce</a>,
+          <p class="description">This project was developed at UTEC - Universidad de Ingenieria y Tecnologia,  to study the air quality by using the N0<sub>2</sub> levels obtained from the satellite Sentinel-5P. 
+            This web app is based on the research paper "Air quality analysis in Lima-Peru using the NO<sub>2</sub> 
+            levels during the COVID-19 pandemic lockdown" written by    <a href="https://www.linkedin.com/in/diego-velayarce-r/?originalSubdomain=pe">Diego Velayarce</a>,
             <a href="https://www.linkedin.com/in/qespisisa-bustos/?originalSubdomain=pe">Qespisisa Bustos</a>, 
             <a href="https://www.linkedin.com/in/maria-paz-garcia-veramatus/?originalSubdomain=pe">María Paz García</a>, 
             <a href="https://www.linkedin.com/in/camila-timana/?originalSubdomain=pe">Camila Timana Mendoza</a>, 
-            <a href="https://www.linkedin.com/in/danielhorna/">Daniel Horna Muñoz, Ph. D.</a>
+            <a href="https://www.linkedin.com/in/ricardo-carbajal-mezarina-3a6911148">Ricardo Carbajal</a>,
+            <a href="https://www.linkedin.com/in/noe-salvatierra-cotrina-1624a912b/">Noe Salvatierra</a>,
+            <a href="https://www.linkedin.com/in/danielhorna/">Daniel Horna Muñoz, Ph. D.</a>, and
             <a href="https://www.linkedin.com/in/victor-murray/">Victor Murray, Ph. D.</a></p>
         </div>
         
         <div id="Satelite" class="tabcontent">
-          <h3>Satélite</h3>
+          <h3>Satellite</h3>
           <p>Sentinel-5P OFFL NO2: Offline Nitrogen Dioxide</p>
-          <h3>Proveedor de datos</h3>
+          <h3>Dataset provider</h3>
           <p><a href="https://sentinel.esa.int/web/sentinel/user-guides/sentinel-5p-tropomi">European Union/ESA/Copernicus</a></p>
-          <h3>Resolución</h3>
-          <p>1113.2 metros</p>
-          <h3>Banda utilizada</h3>
+          <h3>Resolution</h3>
+          <p>1113.2 meters</p>
+          <h3>Band Utilized</h3>
           <p>tropospheric_NO2_column_number_density</p>
-          <h3>Unidades</h3>
+          <h3>Units</h3>
           <p>mol/m<sup>2</sup></p>
           <p>Min: -0.00051</p>
           <p>Max: 0.0192</p>
@@ -132,7 +133,7 @@
               <div class="card2">
                 <img src="Ricardo.png" alt="Avatar" style="width:100%">
                 <h3>Ricardo Carbajal</h3>
-                <p class="title2">Estudiante de Ingeniería Electrónica</p>
+                <p class="title2">Electrical Engineering Student</p>
                 <p>UTEC</p>
                 <a href="https://www.linkedin.com/in/ricardo-carbajal-mezarina-3a6911148"><i class="icon"></i></a>
                 <br>
@@ -143,7 +144,7 @@
             <div class="card1">
               <img src="Noe.png" alt="Avatar" style="width:100%">
               <h3>Noe Salvatierra</h3>
-              <p class="title2">Estudiante de Ingeniería Electrónica</p>
+              <p class="title2">Electrical Engineering Student</p>
               <p>UTEC</p>
               <a href="https://www.linkedin.com/in/noe-salvatierra-cotrina-1624a912b/"><i class="icon"></i></a>
               <br>
@@ -155,7 +156,7 @@
               <img src="Victor.png" alt="Avatar" style="width:100%">
               <h3>Victor Murray</h3>
               <p class="title2">PhD in Electrical Engineering </p>
-              <p>Asesor de Projecto</p>
+              <p>Project Advisor</p>
               <a href="https://www.linkedin.com/in/victor-murray/"><i class="icon"></i></a>
               <br>
             </div>

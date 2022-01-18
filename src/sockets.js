@@ -24,7 +24,7 @@ function rmmissing(data) {
 
         if (data[i][4] != null){
             timestamps.push(data[i][3]);
-            values.push(data[i][4]);
+            values.push(data[i][4]*1000000);
         }
     }
     try {
@@ -95,6 +95,8 @@ module.exports = (io) => {
             var file = params.Name
             var jsonURL = './HistData/'+ file +'.json';      
             let newData = require(jsonURL);
+            for (let data of newData.timeseries) 
+                data[1] = data[1]*1000000;
             socket.emit('Hist', newData);
         })
         

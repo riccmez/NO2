@@ -54,7 +54,6 @@ var overlayMaps = {
 LayerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 var DateDict = {Start: '2018-07-01', End:'2018-07-31'}
-console.log("cargando primera capa")
 showLoader(true);
 socket.emit('Mapviz', DateDict)
 
@@ -94,7 +93,7 @@ map.on('locationfound', e => {
         lat = coords[0]; lng = coords[1];
         const marker = L.marker(coords).addTo(map);
         marker.addTo(layerGroup);
-        marker.bindPopup("Ubicación actual estimada <br> <b>Lon: </b>" + lng.toFixed(2) + "<br> <b>Lat: </b>" + lat.toFixed(2)).openPopup();
+        marker.bindPopup("Estimated Current Location <br> <b>Lon: </b>" + lng.toFixed(2) + "<br> <b>Lat: </b>" + lat.toFixed(2)).openPopup();
         requestMeasurements(e.latlng.lat, e.latlng.lng);
         isMarkerAvailable = false;
 	    showLoader(true);
@@ -198,9 +197,9 @@ let tempdate = new Date("2018/07/01");
 Years(tempdate, currDate, 'Year');
 Years2();
 
-var months = {0:"Ene",1:"Feb",2:"Mar",3:"Abr",
-              4:"May",5:"Jun",6:"Jul",7:"Ago",
-              8:"Sep",9:"Oct",10:"Nov",11:"Dic"}
+var months = {0:"Jan",1:"Feb",2:"Mar",3:"Apr",
+              4:"May",5:"Jun",6:"Jul",7:"Aug",
+              8:"Sep",9:"Oct",10:"Nov",11:"Dec"}
 var months2 = {"1":1,"2":2,"3":3,"4":4,
                "5":5,"6":6,"7":7,"8":8,
                "9":9,"10":10,"11":11,"12":12}
@@ -306,18 +305,18 @@ function MonthSelect(id_month, id_year, id_warn) {
 
 function DateSel(){
 
-    var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
-                "May":"05","Jun":"06","Jul":"07","Ago":"08",
-                "Sep":"09","Oct":"10","Nov":"11","Dic":"12"}
+    var nums = {"Jan":"01","Feb":"02","Mar":"03","Apr":"04",
+                "May":"05","Jun":"06","Jul":"07","Aug":"08",
+                "Sep":"09","Oct":"10","Nov":"11","Dec":"12"}
 
     var Year = document.getElementById('Year').value;
     var Month = document.getElementById('Month').value;
     var m = Month.toString()
     var StartDate = Year.toString() + '-' + nums[m] + '-' + "01"
     var Mdays = 0;
-    if(m == "Ene" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Ago" || m == "Oct" ||m == "Dic")
+    if(m == "Jan" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Aug" || m == "Oct" ||m == "Dec")
         Mdays = 31;
-    else if(m == "Nov" || m == "Abr" || m == "Jun" ||m == "Sep")
+    else if(m == "Nov" || m == "Apr" || m == "Jun" ||m == "Sep")
         Mdays = 30;
     else if(m == "Feb")
         Mdays = 28;
@@ -332,9 +331,9 @@ function DateSel(){
 
 function DateSel2(){
 
-    var nums = {"Ene":"01","Feb":"02","Mar":"03","Abr":"04",
-                "May":"05","Jun":"06","Jul":"07","Ago":"08",
-                "Sep":"09","Oct":"10","Nov":"11","Dic":"12"}
+    var nums = {"Jan":"01","Feb":"02","Mar":"03","Apr":"04",
+                "May":"05","Jun":"06","Jul":"07","Aug":"08",
+                "Sep":"09","Oct":"10","Nov":"11","Dec":"12"}
 
     var Year1 = document.getElementById('startYear').value;
     var Month1 = document.getElementById('startMonth').value;
@@ -345,9 +344,9 @@ function DateSel2(){
     var Month2 = document.getElementById('endMonth').value;
     m = Month2.toString()
     var Mdays = 0;
-    if(m == "Ene" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Ago" || m == "Oct" ||m == "Dic")
+    if(m == "Jan" ||m == "Mar" ||m == "May" ||m == "Jul" ||m == "Aug" || m == "Oct" ||m == "Dec")
         Mdays = 31;
-    else if(m == "Nov" || m == "Abr" || m == "Jun" ||m == "Sep")
+    else if(m == "Nov" || m == "Apr" || m == "Jun" ||m == "Sep")
         Mdays = 30;
     else if(m == "Feb")
         Mdays = 28;
@@ -369,19 +368,19 @@ var ROIs = [[-77.04,-77.12,-77.01,-77.01,-76.99,-76.94,
             [-12.04,-12.02,-12.06,-12.18,-12.06,-12.04,
              -11.98,-12.10,-12.04,-12.09,-12.05,-12.00,
              -12.07,-11.90,-12.10,-11.98,-12.10,-12.04],
-            ['Lima','Aeropuerto Jorge Chávez','Gamarra','Matellini','Mercado de frutas','Santa Anita',
-             'Naranjal','San Isidro','T.Caqueta','T.Javier Prado','Centro de Lima','Huachipa',
-             'Campo de Marte','Carabayllo','Embajada de EE.UU',
-            'San Juan de Lurigancho','San Borja','Santa Anita']]
+            ['Lima metropolitan area','Jorge Chavez International Airport','Gamarra Commercial Emporium','Bus station - Matellini','El Mercado de Frutas','Santa Anita Market',
+             'Bus station - Naranjal','San Isidro','Trebol Caqueta','Trebol Javier Prado','Historic Centre of Lima','Huachipa Industrial Park',
+             'Campo de Marte','Carabayllo','US Embassy in Peru',
+            'San Juan de Lurigancho','San Borja','Santa Anita Market']]
 
-var rDict = {"-77.04,-12.04":'Lima',"-77.12,-12.02":'Aeropuerto Jorge Chávez',
-             "-77.01,-12.06":'Gamarra',"-77.01,-12.18":'Matellini',
-             "-76.99,-12.06":'Mercado de Frutas',"-76.94,-12.04":'Santa Anita_1',
-             "-77.06,-11.98":'Naranjal',"-77.04,-12.10":'San Isidro',
-             "-77.04,-12.04":'T.Caqueta',"-76.98,-12.09":'T.Javier Prado',
-             "-77.02,-12.05":'Centro de Lima',"-76.91,-12.00":'Huachipa',
+var rDict = {"-77.04,-12.04":'Lima metropolitan area',"-77.12,-12.02":'Jorge Chavez International Airport',
+             "-77.01,-12.06":'Gamarra Commercial Emporium',"-77.01,-12.18":'Bus station - Matellini',
+             "-76.99,-12.06":'El Mercado de Frutas',"-76.94,-12.04":'Santa Anita_1',
+             "-77.06,-11.98":'Bus station - Naranjal',"-77.04,-12.10":'San Isidro',
+             "-77.04,-12.04":'Trebol Caqueta',"-76.98,-12.09":'Trebol Javier Prado',
+             "-77.02,-12.05":'Historic Centre of Lima',"-76.91,-12.00":'Huachipa Industrial Park',
              "-77.04,-12.07":'Campo de Marte',"-77.03,-11.90":'Carabayllo',
-             "-76.96,-12.10":'Embajada de EE.UU',"-76.99,-11.98":'San Juan de Lurigancho',
+             "-76.96,-12.10":'US Embassy in Peru',"-76.99,-11.98":'San Juan de Lurigancho',
              "-77.00,-12.10":'San Borja',"-76.97,-12.04":'Santa Anita_2'}
 
 function circleClick(e){
@@ -404,18 +403,18 @@ socket.on('Hist', (res) => {
 })
 
 function refreshROIChart(timeseries) {
-    let _title = "Nivel de Dióxido de Nitrogeno (Histórico)";
+    let _title = "NO2 concentrations levels (ROI)";
     let _subtitle = "ROI: " + Distname;
-    let yTitle = "Niveles de Concentración de NO2 en mol/m^2 Lima";
-    let yScale = {min: 0,max: 0.0004};
+    let yTitle = "NO2 concentrations levels in umol/m^2 Lima";
+    let yScale = {min: 0,max: 400};
     let serie = {name:'NO2', data: timeseries};
     createChart('container2', _title, _subtitle, yTitle, yScale,serie);
 }
 function refreshMarkerChart(timeseries) {
-    let _title = "Nivel de Dióxido de Nitrogeno (Marcador)";
+    let _title = "NO2 concentrations levels (marker)";
     let _subtitle = markerYear;
-    let yTitle = "Niveles de Concentración de NO2 en mol/m^2";
-    let yScale = {min: 0,max: 0.0004};
+    let yTitle = "NO2 concentrations levels in umol/m^2";
+    let yScale = {min: 0,max: 400};
     let serie = {name:'NO2', data: timeseries};
     createChart('container', _title, _subtitle, yTitle, yScale,serie);
 }
@@ -432,12 +431,12 @@ for(let i = 0; i <18; i++){
     loc1.bindPopup(ROIs[2][i]);
 }
 ROI_18.addTo(map);
-LayerControl.addOverlay(ROI_18,"NO2 lugares de interés");
+LayerControl.addOverlay(ROI_18,"NO2 Region of Interest");
 
 socket.on('Link', (res) => {
     var Month = (document.getElementById('Month')).value;
     var Year = (document.getElementById('Year')).value;
-    var label = "Capa NO2: "+ Year.toString() + " " + Month.toString();
+    var label = "NO2 Layer: "+ Year.toString() + " " + Month.toString();
 
     LayerControl.removeLayer(no2Map);
     map.removeLayer(no2Map);
@@ -459,7 +458,7 @@ legend.onAdd = function(map) {
   div.innerHTML += '<i style="background: #FEF768"></i><span>150 - 100</span><br>';
   div.innerHTML += '<i style="background: #7BC768"></i><span>100 - 50</span><br>';
   div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 0</span><br>';
-  div.innerHTML += '<span>Sin color-No registrado</span><br>';
+  div.innerHTML += '<span>Colorless - without measurements</span><br>';
   return div;
 };
 
