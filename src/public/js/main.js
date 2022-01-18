@@ -458,7 +458,7 @@ legend.onAdd = function(map) {
   div.innerHTML += '<i style="background: #FEF768"></i><span>150 - 100</span><br>';
   div.innerHTML += '<i style="background: #7BC768"></i><span>100 - 50</span><br>';
   div.innerHTML += '<i style="background: #4F67FF"></i><span>50 - 0</span><br>';
-  div.innerHTML += '<span>Colorless - without measurements</span><br>';
+  div.innerHTML += '<span> No Color - No measurements</span><br>';
   return div;
 };
 
